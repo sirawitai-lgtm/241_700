@@ -41,7 +41,7 @@ app.post('/users',async (req,res) => {
         res.status(500).json({message:'Error adding user'});
     }
 })
-
+//API GET
 app.get('/users/:id',async (req,res) => {
     try{
         let id = req.params.id;
@@ -58,24 +58,26 @@ app.get('/users/:id',async (req,res) => {
         });
     }
 })
-
-
-app.put('/users/:id',async (req,res ) =>{
+// API PUT
+app.put('/users/:id', async (req, res) => {
     try {
         let id = req.params.id;
-        let updated = req.body;
-        const results = await conn.query('UPDATE users SET ? WHERE id = ?',[updeteUser,id]);
+        // 1. แก้ req.bodyu เป็น req.body และใช้ชื่อตัวแปร updateUser ให้ตรงกัน
+        let updateUser = req.body; 
+
+        // 2. เรียกใช้ตัวแปร updateUser ให้ตรงกับที่ประกาศไว้ด้านบน
+        const results = await conn.query('UPDATE users SET ? WHERE id = ?', [updateUser, id]);
+        
         res.json({
-        message: 'User updated successfully',
-        data: results[0]
+            message: 'User updated successfully',
+            data: results[0]
         });
-    }catch(error){
-        console.error('Error put  user:', error);
+    } catch (error) {
+        console.error('Error put user:', error);
         res.status(500).json({ message: 'Error put user' });
     }
-})
-
-
+});
+// API DELETE
 app.delete('/users/:id', async (req, res) => {
     try {
         let id = req.params.id;
@@ -90,6 +92,10 @@ app.delete('/users/:id', async (req, res) => {
         console.error('Error deleting user:', error);
         res.status(500).json({ message: 'Error deleting user' });
     }
+});
+app.listen(port,async () => {
+    await initMySQL();
+    console.log(`Server is running on http://localhost:${port}`);
 });
 
 
@@ -381,7 +387,3 @@ app.delete('/users/:id',(req,res) => {
     });
 })
 */
-app.listen(port,async () => {
-    await initMySQL();
-    console.log(`Server is running on http://localhost:${port}`);
-});
