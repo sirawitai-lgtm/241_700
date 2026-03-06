@@ -1,9 +1,11 @@
 const validateData = (userData) => {
-    let err =[]
-    if (!userData.firstname) {
+    let err = []
+    // เปลี่ยนจาก .firstname เป็น .fname
+    if (!userData.fname) {
         err.push('กรุณากรอกชื่อ');
     }
-    if (!userData.lastname) {
+    // เปลี่ยนจาก .lastname เป็น .lname
+    if (!userData.lname) {
         err.push('กรุณากรอกนามสกุล');
     }
     if (!userData.age) {
@@ -12,7 +14,8 @@ const validateData = (userData) => {
     if (!userData.gender) {
         err.push('กรุณาเลือกเพศ');
     }
-    if (!userData.interests) {
+
+    if (!userData.insterests) {
         err.push('กรุณาเลือกงานอดิเรกอย่างน้อย 1 อย่าง');
     }
     if (!userData.description) {
@@ -49,7 +52,7 @@ try{
 
     // สร้าง Object ข้อมูล (ต้องเช็คว่า genderDOM มีค่าไหม กัน Error กรณีไม่ได้เลือกเพศ)
     let userData = {
-        ftname: firstNameDOM.value,
+        fname: firstNameDOM.value,
         lname: lastNameDOM.value,
         age: ageDOM.value,
         gender: genderDOM.value,
