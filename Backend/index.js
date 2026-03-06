@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise')
 
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
 app.use(bodyParser.json());
 
 const port = 8000;
@@ -32,7 +35,7 @@ app.post('/users',async (req,res) => {
         let user = req.body;
         const results = await conn.query('Insert into users set ? ',user);
         res.json({
-        massage: 'User added successfully',
+        message: 'User added successfully',
         data: results[0]
     });
 

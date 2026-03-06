@@ -92,3 +92,20 @@ textarea {
 .button:hover {
     background-color: #45a049;
 }
+
+.message{
+    background-color: var(--secondary-color);
+    padding: 10px;
+    margin: 10px;
+    display: none;
+    border-radius: 6px;
+}
+.message.success {
+    background-color: #4CAF50;
+    display: block;
+}
+
+.message.danger {
+    background-color: #ff928a;
+    display: block;
+}
