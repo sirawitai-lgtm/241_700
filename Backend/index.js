@@ -29,10 +29,44 @@ app.get('/users',async (req,res)=> {
 
 })
 
+const validateData = (userData) => {
+    let errors = []
+    // เปลี่ยนจาก .firstname เป็น .fname
+    if (!userData.fname) {
+        errors.push('กรุณากรอกชื่อ');
+    }
+    // เปลี่ยนจาก .lastname เป็น .lname
+    if (!userData.lname) {
+        errors.push('กรุณากรอกนามสกุล');
+    }
+    if (!userData.age) {
+        errors.push('กรุณากรอกอายุ');
+    }
+    if (!userData.gender) {
+        errors.push('กรุณาเลือกเพศ');
+    }
+
+    if (!userData.insterests) {
+        errors.push('กรุณาเลือกงานอดิเรกอย่างน้อย 1 อย่าง');
+    }
+    if (!userData.description) {
+        errors.push('กรุณากรอกคำอธิบาย');
+    }
+    return errors;
+}
+
 
 app.post('/users',async (req,res) => {
     try{
+        
         let user = req.body;
+        const errors = validateData(user);
+        if (errors.length > 0 ){
+            throw{
+                message:'กรุณากรอกข้อมูลให้ครบ',
+                errors:errors
+            }
+        }
         const results = await conn.query('Insert into users set ? ',user);
         res.json({
         message: 'User added successfully',
@@ -40,8 +74,13 @@ app.post('/users',async (req,res) => {
     });
 
     }catch(error){
+        const errorMessage = error.message || 'Error creating user';
+        const errors = error.errors || [];
         console.log('Error inserting user:',error);
-        res.status(500).json({message:'Error adding user'});
+        res.status(500).json({
+            message: errorMessage,
+            errors: errors
+        });
     }
 })
 //API GET
@@ -54,10 +93,12 @@ app.get('/users/:id',async (req,res) => {
         }
         res.json(results[0][0]);
     }catch (error){
-        console.error('Error fetching user :',error);
+        
+        console.error('Error fetching user:', error.message);
         let statusCode = error.statusCode || 500;
-        res.status(500).json({
-            message:error.message||'Error fetching user'
+        res.status(statusCode).json({
+            message: 'Error fetching user',
+            error: error.message
         });
     }
 })

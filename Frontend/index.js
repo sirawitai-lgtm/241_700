@@ -61,28 +61,33 @@ try{
     }
 
     const err = validateData(userData);
-    if (err.length > 0) {
-        throw{
+     if (err.length > 0) {
+         throw{
             message: 'กรอกข้อมูลไม่ครบถ้วน',
             errors: err
-        }
+       }
     }
 
     console.log('submitData', userData);
     const response = await axios.post('http://localhost:8000/users', userData);
     messageDOM.innerText = 'บันทึกข้อมูลสำเร็จ';
     messageDOM.className = 'message success';
-    }catch (err) {
-        console.log('Error Message', err.message)
-        console.log('Error Details', err.errors)
-        //if (err.response) {
-        //console.log('Error Response', err.response.data.message);
-        //}
+    }catch (error) {
+        console.log('Error Message', error.message)
+        console.log('Error Details', error.errors)
+
+        if (error.response) {
+            console.log('error response', error.response);
+            error.message = error.response.data.message;
+            error.errors = error.response.data.errors;
+
+        }
+
         let htmlData = '<div>'
-        htmlData += `<div>${err.message}</div>`
+        htmlData += `<div>${error.message}</div>`
         htmlData += '<ul>'
-        for (let i = 0; i < err.errors.length; i++) {
-            htmlData += `<li>${err.errors[i]}</li>`
+        for (let i = 0; i < error.errors.length; i++) {
+            htmlData += `<li>${error.errors[i]}</li>`
         }
         htmlData += '</ul>'
         htmlData += '</div>'
